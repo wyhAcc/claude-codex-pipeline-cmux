@@ -1,67 +1,67 @@
 # Claude Codex Pipeline for cmux
 
-This tool runs a three-phase local workflow:
+这是一个基于 cmux 的本地三阶段开发流程工具：
 
-1. Claude Code creates an architecture plan.
-2. Codex implements the plan in the current working directory.
-3. Claude Code reviews the result against the original plan.
+1. Claude Code 先生成架构计划。
+2. Codex 根据计划在当前工作目录里实现代码。
+3. Claude Code 再根据原始计划审核实现结果。
 
-The executable entry point is:
+执行入口：
 
 ```bash
-claude-codex-pipeline-cmux [--mode exec|tui] "<task description>"
+claude-codex-pipeline-cmux [--mode exec|tui] "<任务描述>"
 ```
 
-## Install
+## 安装
 
-From this repository:
+在本仓库目录下执行：
 
 ```bash
 ./install.sh
 ```
 
-Add this project directory to `PATH`:
+把当前项目目录加入 `PATH`：
 
 ```bash
 export PATH="$(pwd):$PATH"
 ```
 
-For a permanent zsh setup, append the absolute project path to `~/.zshrc`:
+如果使用 zsh，并且希望永久生效，可以把当前项目的绝对路径写入 `~/.zshrc`：
 
 ```bash
 echo "export PATH=\"$(pwd):\$PATH\"" >> ~/.zshrc
 ```
 
-## Coworker Quick Start
+## 同事快速上手
 
-Share this flow with teammates:
+可以把下面流程发给同事：
 
-1. Clone the repository:
+1. 克隆仓库：
 
 ```bash
 git clone https://github.com/wyhAcc/claude-codex-pipeline-cmux.git
 cd claude-codex-pipeline-cmux
 ```
 
-2. Install the command:
+2. 初始化命令权限：
 
 ```bash
 ./install.sh
 ```
 
-3. Add the cloned project directory to `PATH`:
+3. 把克隆后的项目目录加入 `PATH`：
 
 ```bash
 export PATH="$(pwd):$PATH"
 ```
 
-For a permanent setup, add the absolute project path to the shell profile, such as `~/.zshrc`:
+如果希望永久生效，把当前项目的绝对路径追加到 shell 配置里，例如 `~/.zshrc`：
 
 ```bash
 echo "export PATH=\"$(pwd):\$PATH\"" >> ~/.zshrc
 ```
 
-4. Install and log in to the required CLIs:
+4. 安装并登录依赖 CLI，然后检查版本：
 
 ```bash
 claude --version
@@ -70,154 +70,160 @@ python3 --version
 git --version
 ```
 
-Install cmux separately, then run the pipeline from a cmux terminal/session. The preflight check will fail if the shell cannot be identified by cmux.
+还需要单独安装 cmux。运行 pipeline 时必须从 cmux 的终端或会话里启动；如果当前 shell 不能被 cmux 识别，preflight 会直接失败。
 
-5. Run the pipeline inside the project to edit:
+5. 进入要修改的项目目录后运行：
 
 ```bash
 cd /path/to/project
 git status
-claude-codex-pipeline-cmux --mode exec "implement a static todo page"
+claude-codex-pipeline-cmux --mode exec "实现一个静态 Todo 页面"
 ```
 
-6. For an interactive Codex run:
+6. 如果想人工盯着 Codex 执行，使用交互模式：
 
 ```bash
-claude-codex-pipeline-cmux --mode tui "refactor the dashboard UI"
+claude-codex-pipeline-cmux --mode tui "重构 dashboard 页面"
 ```
 
-In `tui` mode, type `/exit` in Codex after the implementation is done. That triggers the Claude review phase.
+在 `tui` 模式下，Codex 完成实现后，需要在 Codex 里输入：
 
-7. Review the output:
+```text
+/exit
+```
+
+这样才会进入 Claude Code 审核阶段。
+
+7. 查看结果：
 
 ```bash
 git diff
 ```
 
-Read the review file printed at the end, usually:
+运行结束后终端会打印 review 文件路径，通常是：
 
 ```text
 /tmp/pipeline-review-<pid>.md
 ```
 
-Only commit after checking the review report and the generated diff.
+建议先阅读 review 文件，再检查 `git diff`，确认没问题后再提交代码。
 
-## Requirements
+## 环境要求
 
-Install and log in to:
+需要安装并登录：
 
 - cmux
-- Claude Code CLI, available as `claude`
-- Codex CLI, available as `codex`
+- Claude Code CLI，命令为 `claude`
+- Codex CLI，命令为 `codex`
 
-Also required:
+还需要：
 
 - `python3`
 - `git`
 - `realpath`
-- standard Unix commands: `bash`, `find`, `grep`, `head`, `tee`, `sed`, `cut`, `sleep`
+- 常见 Unix 命令：`bash`、`find`、`grep`、`head`、`tee`、`sed`、`cut`、`sleep`
 
-Optional:
+可选：
 
-- Google Chrome or a default browser, used only when the target directory contains `index.html`.
+- Google Chrome 或系统默认浏览器。只有当前项目目录存在 `index.html` 时才会用于自动预览。
 
-## Preflight
+## Preflight 检查
 
-The script checks requirements before starting:
+脚本启动前会检查：
 
-- cmux is installed and reachable.
-- The current shell can be identified by cmux.
-- `claude` and `codex` are installed and usable.
-- `python3`, `git`, and supporting shell commands exist.
-- The current directory git status is understood.
+- cmux 是否安装并可执行。
+- 当前 shell 是否能被 cmux 识别。
+- `claude` 和 `codex` 是否安装且可用。
+- `python3`、`git` 和基础 shell 命令是否存在。
+- 当前目录是否是 git 仓库。
 
-If cmux is installed somewhere non-standard, set `CMUX`:
+如果 cmux 安装在非默认位置，可以通过 `CMUX` 指定：
 
 ```bash
-CMUX=/path/to/cmux claude-codex-pipeline-cmux --mode exec "build a static todo app"
+CMUX=/path/to/cmux claude-codex-pipeline-cmux --mode exec "实现一个静态 Todo 页面"
 ```
 
-## Usage
+## 使用方式
 
-Run from the project directory you want Codex to edit:
+进入你希望 Codex 修改的项目目录后运行：
 
 ```bash
 cd /path/to/project
-claude-codex-pipeline-cmux --mode exec "implement the feature described in README.md"
+claude-codex-pipeline-cmux --mode exec "根据 README.md 实现功能"
 ```
 
-Use quotes around the task description. The script now accepts multi-word tasks, but quoting keeps shell parsing predictable.
+建议给任务描述加引号。脚本支持多词任务描述，但加引号可以避免 shell 解析造成歧义。
 
-### Modes
+### 执行模式
 
-`exec` mode runs Codex automatically and continues to review when Codex exits:
+`exec` 模式会让 Codex 自动执行，Codex 退出后自动进入 Claude Code 审核：
 
 ```bash
-claude-codex-pipeline-cmux --mode exec "create index.html, style.css, and app.js for a calculator"
+claude-codex-pipeline-cmux --mode exec "创建 index.html、style.css 和 app.js，实现一个计算器"
 ```
 
-`tui` mode opens the interactive Codex UI in the cmux split. When done, type `/exit` in Codex to trigger review:
+`tui` 模式会在 cmux 分屏里打开 Codex 交互界面。实现完成后，在 Codex 里输入 `/exit` 触发审核：
 
 ```bash
-claude-codex-pipeline-cmux --mode tui "refactor the dashboard UI"
+claude-codex-pipeline-cmux --mode tui "重构 dashboard 页面"
 ```
 
-If `--mode` is omitted, the script asks interactively when stdin is a terminal.
+如果不传 `--mode`，并且当前 stdin 是交互式终端，脚本会询问选择 `exec` 还是 `tui`。
 
-## Git Guidance
+## Git 使用建议
 
-Use a git repository for real work:
+真实项目建议在 git 仓库里运行：
 
 ```bash
 cd /path/to/project
 git status
-claude-codex-pipeline-cmux --mode exec "your task"
+claude-codex-pipeline-cmux --mode exec "你的任务"
 git diff
 ```
 
-Recommended team workflow:
+推荐团队流程：
 
-1. Start from a clean working tree.
-2. Run the pipeline.
-3. Read the review file printed at the end.
-4. Inspect `git diff`.
-5. Commit only after reviewing the changes.
+1. 从干净的 working tree 开始。
+2. 运行 pipeline。
+3. 阅读终端最后打印的 review 文件。
+4. 检查 `git diff`。
+5. 人工确认后再提交。
 
-If the current directory is not a git repo, `exec` mode uses `--skip-git-repo-check`. In `tui` mode, the script may initialize git in the target directory because interactive Codex expects a repo.
+如果当前目录不是 git 仓库，`exec` 模式会使用 `--skip-git-repo-check`。在 `tui` 模式下，脚本可能会执行 `git init`，因为交互式 Codex 更依赖 git 仓库上下文。
 
-## Outputs
+## 输出文件
 
-Each run writes temporary files:
+每次运行会生成临时文件：
 
-- Plan: `/tmp/pipeline-plan-<pid>.md`
-- Review: `/tmp/pipeline-review-<pid>.md`
+- 计划文件：`/tmp/pipeline-plan-<pid>.md`
+- 审核文件：`/tmp/pipeline-review-<pid>.md`
 
-The review prints a compact PASS/WARN/FAIL summary at the end.
+审核阶段结束后，终端会输出简短的 PASS/WARN/FAIL 摘要。
 
-## Safety Notes
+## 安全注意事项
 
-- Run only in directories where Codex is allowed to write.
-- Do not run in directories containing secrets, customer data, or production-only configuration unless that data is safe to send to Claude/Codex.
-- The script sends directory listings, file tree summaries, diffs, and file excerpts to Claude/Codex.
-- Review generated code before committing or shipping it.
+- 只在允许 Codex 写入的目录运行。
+- 不要在包含密钥、客户数据、生产专用配置的目录里直接运行，除非这些内容可以安全发送给 Claude/Codex。
+- 脚本会把目录列表、文件树摘要、diff 和文件片段发送给 Claude/Codex。
+- 提交或发布前必须人工 review 生成的代码。
 
-## Troubleshooting
+## 常见问题
 
 `cmux is installed but this shell is not identifiable by cmux`
 
-Run the command from a cmux terminal/session.
+请从 cmux 终端或 cmux 会话里运行命令。
 
 `claude CLI is installed but not usable`
 
-Check that Claude Code is installed, on `PATH`, and logged in.
+检查 Claude Code 是否安装、是否在 `PATH` 上，以及是否已经登录。
 
 `codex CLI is installed but not usable`
 
-Check that Codex is installed, on `PATH`, and logged in.
+检查 Codex 是否安装、是否在 `PATH` 上，以及是否已经登录。
 
 `Current directory is not a git repo`
 
-This is a warning for `exec` mode. For team use, prefer initializing git first:
+这是 `exec` 模式下的提示。团队使用时建议先初始化 git：
 
 ```bash
 git init
