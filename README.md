@@ -20,6 +20,8 @@ claude-codex-pipeline-cmux [--mode exec|tui] "<任务描述>"
 ./install.sh
 ```
 
+安装脚本会给主脚本添加执行权限，并检查 `claude`、`codex`、`python3`、`git` 是否可用。
+
 把当前项目目录加入 `PATH`：
 
 ```bash
@@ -41,7 +43,7 @@ git clone https://github.com/wyhAcc/claude-codex-pipeline-cmux.git
 cd claude-codex-pipeline-cmux
 ```
 
-2. 初始化命令权限：
+2. 初始化命令权限并检查基础依赖：
 
 ```bash
 ./install.sh
@@ -59,16 +61,14 @@ export PATH="$(pwd):$PATH"
 echo "export PATH=\"$(pwd):\$PATH\"" >> ~/.zshrc
 ```
 
-4. 安装并登录依赖 CLI，然后检查版本：
+4. 确认依赖 CLI 已安装并登录：
 
 ```bash
 claude --version
 codex --version
-python3 --version
-git --version
 ```
 
-还需要单独安装 cmux。运行 pipeline 时必须从 cmux 的终端或会话里启动；如果当前 shell 不能被 cmux 识别，preflight 会直接失败。
+`python3` 和 `git` 会在安装脚本中检查。还需要单独安装 cmux。运行 pipeline 时必须从 cmux 的终端或会话里启动；如果当前 shell 不能被 cmux 识别，preflight 会直接失败。
 
 5. 进入要修改的项目目录后运行：
 
