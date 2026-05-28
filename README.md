@@ -32,11 +32,9 @@ export PATH="$(pwd):$PATH"
 echo "export PATH=\"$(pwd):\$PATH\"" >> ~/.zshrc
 ```
 
-## 同事快速上手
+## 快速开始
 
-可以把下面流程发给同事：
-
-1. 克隆仓库：
+1. 克隆仓库并进入目录：
 
 ```bash
 git clone https://github.com/wyhAcc/claude-codex-pipeline-cmux.git
@@ -49,7 +47,7 @@ cd claude-codex-pipeline-cmux
 ./install.sh
 ```
 
-3. 把克隆后的项目目录加入 `PATH`：
+3. 把项目目录加入 `PATH`：
 
 ```bash
 export PATH="$(pwd):$PATH"
@@ -181,7 +179,7 @@ claude-codex-pipeline-cmux --mode exec "你的任务"
 git diff
 ```
 
-推荐团队流程：
+推荐流程：
 
 1. 从干净的 working tree 开始。
 2. 运行 pipeline。
@@ -223,7 +221,7 @@ git diff
 
 `Current directory is not a git repo`
 
-这是 `exec` 模式下的提示。团队使用时建议先初始化 git：
+这是 `exec` 模式下的提示。正式使用时建议先初始化 git：
 
 ```bash
 git init
