@@ -20,10 +20,16 @@ From this repository:
 ./install.sh
 ```
 
-Make sure `~/.local/bin` is on `PATH`:
+Add this project directory to `PATH`:
 
 ```bash
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$(pwd):$PATH"
+```
+
+For a permanent zsh setup, append the absolute project path to `~/.zshrc`:
+
+```bash
+echo "export PATH=\"$(pwd):\$PATH\"" >> ~/.zshrc
 ```
 
 ## Coworker Quick Start
@@ -43,13 +49,17 @@ cd claude-codex-pipeline-cmux
 ./install.sh
 ```
 
-3. Make sure `~/.local/bin` is on `PATH`:
+3. Add the cloned project directory to `PATH`:
 
 ```bash
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$(pwd):$PATH"
 ```
 
-For a permanent setup, add that line to the shell profile, such as `~/.zshrc`.
+For a permanent setup, add the absolute project path to the shell profile, such as `~/.zshrc`:
+
+```bash
+echo "export PATH=\"$(pwd):\$PATH\"" >> ~/.zshrc
+```
 
 4. Install and log in to the required CLIs:
 
