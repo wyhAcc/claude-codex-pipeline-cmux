@@ -26,6 +26,72 @@ Make sure `~/.local/bin` is on `PATH`:
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
+## Coworker Quick Start
+
+Share this flow with teammates:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/wyhAcc/claude-codex-pipeline-cmux.git
+cd claude-codex-pipeline-cmux
+```
+
+2. Install the command:
+
+```bash
+./install.sh
+```
+
+3. Make sure `~/.local/bin` is on `PATH`:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+For a permanent setup, add that line to the shell profile, such as `~/.zshrc`.
+
+4. Install and log in to the required CLIs:
+
+```bash
+claude --version
+codex --version
+python3 --version
+git --version
+```
+
+Install cmux separately, then run the pipeline from a cmux terminal/session. The preflight check will fail if the shell cannot be identified by cmux.
+
+5. Run the pipeline inside the project to edit:
+
+```bash
+cd /path/to/project
+git status
+claude-codex-pipeline-cmux --mode exec "implement a static todo page"
+```
+
+6. For an interactive Codex run:
+
+```bash
+claude-codex-pipeline-cmux --mode tui "refactor the dashboard UI"
+```
+
+In `tui` mode, type `/exit` in Codex after the implementation is done. That triggers the Claude review phase.
+
+7. Review the output:
+
+```bash
+git diff
+```
+
+Read the review file printed at the end, usually:
+
+```text
+/tmp/pipeline-review-<pid>.md
+```
+
+Only commit after checking the review report and the generated diff.
+
 ## Requirements
 
 Install and log in to:
